@@ -323,6 +323,7 @@ void TpcDirectLaserReconstruction::process_track( SvtxTrack* track )
       TrkrDefs::hitsetkey hitsetkey = hitsetitr->first;
       TrkrHitSet *hitset = hitsetitr->second;
       unsigned int layer = TrkrDefs::getLayer(hitsetkey);
+      unsigned int side = TpcDefs::getSide(hitsetkey);
       PHG4CylinderCellGeom *layergeom = m_geom_container->GetLayerCellGeom(layer);
       const auto layer_center_radius = layergeom->get_radius();
 
@@ -341,9 +342,18 @@ void TpcDirectLaserReconstruction::process_track( SvtxTrack* track )
 	double phi = layergeom->get_phicenter(phibin);
 	double x = layer_center_radius * cos(phi);
 	double y = layer_center_radius * sin(phi);
-	double z = layergeom->get_zcenter(zbin);
+	double time = layergeom->get_zcenter(zbin);
+	double driftlength = time * m_tGeometry->get_drift_velocity();
+	double z = m_zmax-driftlength;
+	if (side==0){
+	  z=-z;
+	}
 	const TVector3 global(x,y,z);
-
+	if (Verbosity()>2){
+	std::cout<<"Layer " << layer <<" Side "<< side << " Zbin "<< zbin <<"   "<<global<<std::endl;
+	}
+	
+	
 	float adc = (hitr->second->getAdc()) - m_pedestal; 
 	
 	// calculate dca
