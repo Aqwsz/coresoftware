@@ -229,8 +229,8 @@ int TpcDirectLaserReconstruction::load_nodes( PHCompositeNode* topNode )
   assert( m_geom_container );
 
   // acts surface map
-  m_surfmaps = findNode::getClass<ActsSurfaceMaps>(topNode, "ActsSurfaceMaps");
-  assert( m_surfmaps );
+  //m_surfmaps = findNode::getClass<ActsSurfaceMaps>(topNode, "ActsSurfaceMaps");
+  //assert( m_surfmaps );
 
   // acts geometry
   m_tGeometry = findNode::getClass<ActsGeometry>(topNode, "ActsGeometry");
